@@ -6,6 +6,18 @@ Gungnir is a DNA storage codec system that supports adjustable configurations to
 
 This repository provides a complete toolkit for running sample test, including encoding/decoding algorithms, simulation tools, and practical examples. 
 
+## Content
+- [Introduction](#introduction)
+- [Installation](#installation)
+  - [Install Go 1.21](#install-go-121)
+  - [Get Gungnir source code](#get-gungnir-source-code)
+- [Data Preprocessing](#data-preprocessing)
+- [Quick Start](#quick-start)
+  - [DNA Encoding](#dna-encoding)
+  - [DNA Decoding](#dna-decoding)
+  - [Distance Calculation](#distance-calculation)
+  - [Error Simulation](#error-simulation)
+
 ## Files Tree Diagram
 ```
 Gungnir
@@ -31,3 +43,4 @@ Gungnir
 ├── go.mod                                   # Go module
 └── go.sum                                   # Dependency checksums
 ```
+## Installation
