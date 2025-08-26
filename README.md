@@ -9,8 +9,8 @@ This repository provides a complete toolkit for running sample test, including e
 ## Content
 - [Introduction](#introduction)
 - [Installation](#installation)
-  - [Install Go 1.21](#install-go-121)
-  - [Get Gungnir source code](#get-gungnir-source-code)
+  - [Install go 1.23](#1install-go-123)
+  - [Get Gungnir source code](#2get-gungnir-source-code)
 - [Data Preprocessing](#data-preprocessing)
 - [Quick Start](#quick-start)
   - [DNA Encoding](#dna-encoding)
@@ -44,3 +44,50 @@ Gungnir
 └── go.sum                                   # Dependency checksums
 ```
 ## Installation
+### 1.Install go 1.23
+Download and install Golang from the official website (https://golang.org/dl/).
+```
+# Download the latest Golang version 1.23 by visiting the official website (https://golang.org/dl/) and, 
+# copying the download link for the Linux tarball.
+# An example is shown below:
+wget https://golang.org/dl/go1.23.10.linux-amd64.tar.gz
+
+# Extract the downloaded tarball to your preferred local directory. In this example, we'll use `$HOME/.local`:
+mkdir -p $HOME/.local
+tar -xvzf go1.23.10.linux-amd64.tar.gz -C $HOME/.local
+
+# Remove the tarball after extraction
+rm go1.23.10.linux-amd64.tar.gz
+
+# Set up your Go workspace and environment variables
+## Create the required directory structure:
+mkdir -p $HOME/go/{bin,src,pkg}
+
+## add link to bashrc or .profile
+## add the GOPATH,GOROOT to your `~/.bashrc` or `~/.profile`
+echo 'export GOPATH=$HOME/go
+export GOROOT=$HOME/.local/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> ~/.bashrc
+source ~/.bashrc
+
+## Verify the installation
+## You will get "go version go1.23.10 linux/amd64" if installed successfully
+go version
+```
+### 2.Get Gungnir source code
+You can clone this repo as following:
+```
+mkdir Gungnir_RootFolder
+cd Gungnir_RootFolder
+git clone git@github.com:HKU-BAL/Gungnir.git
+cd Gungnir
+
+# $Gungnir_DIR is path of Gungnir
+Gungnir_DIR=$(pwd)
+```
+
+
+
+
+
+
