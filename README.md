@@ -11,12 +11,11 @@ This repository provides a complete toolkit for running sample test, including e
 - [Installation](#installation)
   - [Install go 1.23](#1install-go-123)
   - [Get Gungnir source code](#2get-gungnir-source-code)
-- [Data Preprocessing](#data-preprocessing)
 - [Quick Start](#quick-start)
-  - [DNA Encoding](#dna-encoding)
-  - [DNA Decoding](#dna-decoding)
-  - [Distance Calculation](#distance-calculation)
-  - [Error Simulation](#error-simulation)
+  - [DNA Encoding](#1-dna-encoding)
+  - [Add Noise](#2-add-noise)
+  - [DNA Decoding](3-dna-decoding)
+  - [Reconstruction](#4-reconstruction)
 
 ## Files Tree Diagram
 ```
@@ -85,9 +84,30 @@ cd Gungnir
 # $Gungnir_DIR is path of Gungnir
 Gungnir_DIR=$(pwd)
 ```
+## Quick Start
+This section demonstrates the basic workflow of our DNA storage system. The following commands will encode a file into DNA sequences, simulate sequencing errors, decode the noisy sequences, and reconstruct the original file.
+### 1. DNA Encoding
+Convert your digital file into DNA sequences (A, T, C, G). This process will generate an *Origin* file inside the *Outcome* directory.
+```
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome"
+```
+Default parameters apply the Gungnir method at 0.8 density, you can modify these by applying optional parameters.
+### 2. Add Noise
+Simulate DNA sequencing errors aiming at testing the robustness of the codec.
+```
+go run main.go -action AddNoise -output "../Outcome"
+```
+This adds 1% substitution, 1% insertion, and 1% deletion errors by default.
 
-
-
-
-
-
+### 3. DNA Decoding
+Decode the noisy DNA sequences back to digital data with error correction.
+```
+go run main.go -action Decode -output "../Outcome"
+```
+The decoder automatically corrects errors using adaptive edit distance algorithms.
+### 4. Reconstruction
+Rebuild the original file from the decoded data.
+```
+go run main.go -action Reconstruction -output "../Outcome"
+```
+After this step, your original file will be recovered in *output* file inside the *Outcome* directory.
