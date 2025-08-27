@@ -16,6 +16,7 @@ This repository provides a complete toolkit for running sample test, including e
   - [Add Noise](#2-add-noise)
   - [DNA Decoding](3-dna-decoding)
   - [Reconstruction](#4-reconstruction)
+- [Customized Usage](#customized-usage)
 
 ## Files Tree Diagram
 ```
@@ -111,3 +112,7 @@ Rebuild the original file from the decoded data.
 go run main.go -action Reconstruction -output "../Outcome"
 ```
 After this step, your original file will be recovered in *output* file inside the *Outcome* directory.
+
+## Customized Usage
+Our codec supports various modifiable parameters to optimize specific use case:
+
