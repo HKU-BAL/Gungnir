@@ -114,5 +114,44 @@ go run main.go -action Reconstruction -output "../Outcome"
 After this step, your original file will be recovered in *output* file inside the *Outcome* directory.
 
 ## Customized Usage
-Our codec supports various modifiable parameters to optimize specific use case:
+Adjust information density：
+```
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -density 0.7
+```
+Simulate different error rate:
+```
+go run main.go -action AddNoise -output "../Outcome" -sub 0.02 -ins 0.02 -del 0.02
+```
+Enable Multi-threading:
+```
+go run main.go -action Decode -output "../Outcome" -thread1 4 -thread2 2
+```
+Our codec provides 3 types of methods for different utility:
+Gungnir-ONT:
+```
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -option Gungnir-ONT -density 0.7
+go run main.go -action Decode -output "../Outcome" -option Gungnir-ONT -density 0.7
+```
+Gungnir-Trit:
+```
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -option Gungnir-Trit -density 1.11
+go run main.go -action Decode -output "../Outcome" -option Gungnir-Trit -density 1.11
+```
+>[!Note]
+>Gungnir and Gungnir-ONT support density range: [0.5, 0.6, 0.7, 0.8, 0.9]  
+>Gungnir-Trit supports density range: [0.87, 0.99, 1.11, 1.23, 1.35, 1.45]
+
+Limiting Output Sequences:
+```
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -seqnum 1000
+```
+Fixed or Adaptive Error Correction:
+```
+# Use fixed edit distance (faster but less flexible)
+go run main.go -action Decode -output "../Outcome" -DecodeEDmax false -EDmax 50
+# Use adaptive edit distance (default, more robust)
+go run main.go -action Decode -output "../Outcome" -DecodeEDmax true
+```
+
+
 
