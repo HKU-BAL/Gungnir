@@ -122,7 +122,7 @@ Simulate different error rate:
 ```
 go run main.go -action AddNoise -output "../Outcome" -sub 0.02 -ins 0.02 -del 0.02
 ```
-Enable Multi-threading:
+Enable Multi-threading (thread1: sequences processed in parallel; thread2: goroutine for each sequence):
 ```
 go run main.go -action Decode -output "../Outcome" -thread1 4 -thread2 2
 ```
