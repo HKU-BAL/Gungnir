@@ -1,8 +1,8 @@
 # Gungnir
-Guess till correct: Gungnir codec enabling low redundancy DNA storage through substantial computing power
+Guess till correct: Gungnir codec enabling high error-tolerance and low-redundancy DNA storage through substantial computing power
 
 ## Introduction
-Gungnir is a DNA storage codec system that supports adjustable configurations to maintain a balance between information density and error tolerance. Powered by the computing power, Gungnir catches up with the performance of traditional methods with the use of only half the DNA bases. 
+DNA has emerged as a compelling archival storage medium, offering unprecedented information density and millennia-scale durability. Despite its promise, DNA-based data storage faces critical challenges due to error-prone processes during DNA synthesis, storage, and sequencing. In this study, we introduce Gungnir, a codec system using the proof-of-work idea to address substitution, insertion, and deletion errors in a sequence. With a hash signature for each data fragment, Gungnir corrects the errors by testing the educated guesses until the hash signature is matched. For practicality, especially when sequenced with nanopore long-read, Gungnir also considers biochemical constraints including GC-content, homopolymers, and error-prone motifs during encoding. In silico benchmarking demonstrates its outperforming error resilience capacity against the state-of-art methods and achieving complete binary data recovery from a single sequence copy containing 20% erroneous bases. Gungnir requires neither keeping many redundant sequence copies to address storage degradation, nor high-coverage sequencing to address sequencing error, reducing the overall cost of using DNA for storage. 
 
 This repository provides a complete toolkit for running sample test, including encoding/decoding algorithms, simulation tools, and practical examples. 
 
@@ -27,12 +27,14 @@ Gungnir
 │   └── main.go                              # Example usage code
 ├── files
 │   └── The Ugly Duckling                    # Sample test file
+│   └── Summer Flowers                       # Simple test case
 ├── tools
 │   ├── decode.go                            # DNA decoding
 │   ├── decode_three.go                      # Ternary DNA decoding
 │   ├── distance.go                          # Distance calculation
 │   ├── encode.go                            # DNA encoding
 │   ├── exclude.go                           # Invalid motifs
+│   ├── functions.go                         # Encapsulate callable functions
 │   ├── hash.go                              # Hash functions
 │   ├── params.go                            # Parameters
 │   ├── readfile.go                          # File reading functions
@@ -80,10 +82,8 @@ You can clone this repo as following:
 mkdir Gungnir_RootFolder
 cd Gungnir_RootFolder
 git clone git@github.com:HKU-BAL/Gungnir.git
-cd Gungnir
+cd Gungnir/examples
 
-# $Gungnir_DIR is path of Gungnir
-Gungnir_DIR=$(pwd)
 ```
 ## Quick Start
 This section demonstrates the basic workflow of our DNA storage system. The following commands will encode a file into DNA sequences, simulate sequencing errors, decode the noisy sequences, and reconstruct the original file.
@@ -101,11 +101,11 @@ go run main.go -action AddNoise -output "../Outcome"
 This adds 1% substitution, 1% insertion, and 1% deletion errors by default.
 
 ### 3. DNA Decoding
-Decode the noisy DNA sequences back to digital data with error correction.
+Decode the noisy DNA sequences with error correction. This process will generate an *Decoded* file inside the *Outcome* directory.
 ```
 go run main.go -action Decode -output "../Outcome"
 ```
-The decoder automatically corrects errors using adaptive edit distance algorithms.
+The decoder automatically corrects errors using advancing edit distance algorithms.
 ### 4. Reconstruction
 Rebuild the original file from the decoded data.
 ```
@@ -143,13 +143,13 @@ go run main.go -action Decode -output "../Outcome" -option Gungnir-Trit -density
 
 Limiting Output Sequences:
 ```
-go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -seqnum 1000
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -seqnum 50
 ```
 Fixed or Adaptive Error Correction:
 ```
 # Use fixed edit distance (faster but less flexible)
-go run main.go -action Decode -output "../Outcome" -DecodeEDmax false -EDmax 50
-# Use adaptive edit distance (default, more robust)
+go run main.go -action Decode -output "../Outcome" -DecodeEDmax false -EDmax 5
+# Use advancing edit distance (default, more robust)
 go run main.go -action Decode -output "../Outcome" -DecodeEDmax true
 ```
 
