@@ -118,6 +118,10 @@ Adjust information density：
 ```
 go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -density 0.7
 ```
+Flexible sequence length (under development, only applicable for Gungnir and Gungnir-ONT now)：
+```
+go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -length 200
+```
 Simulate different error rate:
 ```
 go run main.go -action AddNoise -output "../Outcome" -sub 0.02 -ins 0.02 -del 0.02
