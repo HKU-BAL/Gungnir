@@ -148,9 +148,9 @@ go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outco
 Fixed or Adaptive Error Correction:
 ```
 # Use fixed edit distance (faster but less flexible)
-go run main.go -action Decode -output "../Outcome" -DecodeEDmax false -EDmax 5
+go run main.go -action Decode -output "../Outcome" -DecodeEDmax=false -EDmax 5
 # Use advancing edit distance (default, more robust)
-go run main.go -action Decode -output "../Outcome" -DecodeEDmax true
+go run main.go -action Decode -output "../Outcome" -DecodeEDmax=true
 ```
 
 

@@ -51,6 +51,7 @@ func main() {
 	Subrate_ := flag.Float64("sub", 0.01, "Substitution Error Rate")
 	Insrate_ := flag.Float64("ins", 0.01, "Insertion Error Rate")
 	Delrate_ := flag.Float64("del", 0.01, "Deletion Error Rate")
+	DNALength_ := flag.Int("length", 100, "Length of DNA sequence (only applicable for Gungnir and Gungnir-ONT now)")
 	Option_ := flag.String("option", "Gungnir", "Gungnir, Gungnir-ONT or Gungnir-Trit")
 	Action_ := flag.String("action", "Encode", "Encode, AddNoise, Decode or Reconstruction")
 	Input_ := flag.String("input", "../files/The Ugly Duckling", "File to be encoded")
@@ -64,6 +65,8 @@ func main() {
 	flag.Parse()
 
 	option := *Option_
+	seqlen := *DNALength_
+
 	var config, PayloadLen, HashLen int
 	if option == "Gungnir" {
 		config = tools.Gungnir_Default_Params
@@ -71,18 +74,20 @@ func main() {
 			fmt.Println("Invalid Information Density!")
 			return
 		}
-		PayloadLen = int(math.Ceil(100 * *information_density_))
-		HashLen = int(100 - PayloadLen)
+		PayloadLen = int(math.Ceil(float64(seqlen) * *information_density_))
+		HashLen = int(seqlen - PayloadLen)
 	} else if option == "Gungnir-ONT" {
 		config = tools.Gungnir_ONT_Params
 		if !numinset(*information_density_, Gungnir_density) {
 			fmt.Println("Invalid Information Density!")
 			return
 		}
-		PayloadLen = int(math.Ceil(100 * *information_density_))
-		HashLen = int(100 - PayloadLen)
+		PayloadLen = int(math.Ceil(float64(seqlen) * *information_density_))
+		HashLen = int(seqlen - PayloadLen)
 	} else if option == "Gungnir-Trit" {
 		config = tools.Gungnir_Trit_Params
+		seqlen = 100
+		// fixed sequence length now
 		if !numinset(*information_density_, Trit_density) {
 			fmt.Println("Invalid Information Density!")
 			return

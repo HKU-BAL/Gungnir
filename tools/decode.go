@@ -4,14 +4,14 @@
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the copyright holder nor the
-//    names of its contributors may be used to endorse or promote products
-//    derived from this software without specific prior written permission.
+//  1. Redistributions of source code must retain the above copyright
+//     notice, this list of conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
+//  3. Neither the name of the copyright holder nor the
+//     names of its contributors may be used to endorse or promote products
+//     derived from this software without specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -34,7 +34,7 @@ import (
 )
 
 type Hypothesis struct {
-	Info    int // lask 2k-2 bit ~ Pattern; 8 bit ~ GC; 8 bit ~ Depth; 8 bit ~ Index; 15 bit ~ sub, del, ins; 8 bit ~ last error index
+	Info    int
 	Penalty int
 	Bits    []int
 }
@@ -48,11 +48,11 @@ func (hypo *Hypothesis) GC(params Params) int {
 }
 
 func (hypo *Hypothesis) Depth(params Params) int {
-	return (hypo.Info >> params.Depthrightshift) & Uint8Mask
+	return (hypo.Info >> params.Depthrightshift) & Uint9Mask
 }
 
 func (hypo *Hypothesis) Index(params Params) int {
-	return (hypo.Info >> params.Indexrightshift) & Uint8Mask
+	return (hypo.Info >> params.Indexrightshift) & Uint9Mask
 }
 
 func (hypo *Hypothesis) GenStrandID(params Params) int {
@@ -63,8 +63,8 @@ func (hypo *Hypothesis) BuildInfo(pattern, gc, depth, index, strandID int, param
 	res := 0
 	res += (pattern & params.PatternMask)
 	res += (gc & Uint8Mask) << params.GCrightshift
-	res += (depth & Uint8Mask) << params.Depthrightshift
-	res += (index & Uint8Mask) << params.Indexrightshift
+	res += (depth & Uint9Mask) << params.Depthrightshift
+	res += (index & Uint9Mask) << params.Indexrightshift
 	res += (strandID & Uint16Mask) << params.Addressrightshift
 	return res
 }
@@ -317,7 +317,7 @@ func Genroothypo(data map[string]Kmer, strandID int, params Params) Hypothesis {
 	var hypo Hypothesis
 	pattern := Runes2Pattern([]rune(InitPattern(params.PreviousNuc)), params)
 	hypo.Penalty = 0.0
-	hypo.Info = hypo.BuildInfo(pattern, 0, 0, Uint8Mask, strandID, params)
+	hypo.Info = hypo.BuildInfo(pattern, 0, 0, Uint9Mask, strandID, params)
 	hypo.Bits = make([]int, params.Necessary_Decoding_Ints)
 	for i := 0; i < params.Necessary_Decoding_Ints; i++ {
 		hypo.Bits[i] = 0
@@ -350,7 +350,7 @@ func (hypo *Hypothesis) Addchild(DataC []rune, data map[string]Kmer, EDmax int, 
 
 		x_depth := depth + 1
 		x_gc := gc
-		x_index := (index + 1) & Uint8Mask
+		x_index := (index + 1) & Uint9Mask
 
 		childX.Bits = make([]int, params.Necessary_Decoding_Ints)
 		for j := 0; j < params.Necessary_Decoding_Ints; j++ {

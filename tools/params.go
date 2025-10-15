@@ -4,14 +4,14 @@
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the copyright holder nor the
-//    names of its contributors may be used to endorse or promote products
-//    derived from this software without specific prior written permission.
+//  1. Redistributions of source code must retain the above copyright
+//     notice, this list of conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
+//  3. Neither the name of the copyright holder nor the
+//     names of its contributors may be used to endorse or promote products
+//     derived from this software without specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -216,8 +216,8 @@ func (paramsraw *ParamsRaw) Compile(option int) Params {
 		params.PatternMask = (1 << (2 * params.PreviousNuc)) - 1
 		params.GCrightshift = 2 * params.PreviousNuc
 		params.Depthrightshift = params.GCrightshift + 8
-		params.Indexrightshift = params.Depthrightshift + 8
-		params.Addressrightshift = params.Indexrightshift + 8
+		params.Indexrightshift = params.Depthrightshift + 9
+		params.Addressrightshift = params.Indexrightshift + 9
 		params.GCmax = 0.6
 		params.GCmin = 0.4
 		params.Balance_Bound = 1.0
@@ -246,6 +246,7 @@ const Maxhypo_ultra = 200000000
 const Maxhypo_simple = 100
 const Uint5Mask = (1 << 5) - 1
 const Uint8Mask = (1 << 8) - 1
+const Uint9Mask = (1 << 9) - 1
 const Uint11Mask = (1 << 11) - 1
 const Uint14Mask = (1 << 14) - 1
 const Uint16Mask = (1 << 16) - 1
