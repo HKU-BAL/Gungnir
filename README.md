@@ -1,5 +1,10 @@
 # Gungnir
-Guess till correct: Gungnir codec enabling high error-tolerance and low-redundancy DNA storage through substantial computing power
+Gungnir codec enabling high error-tolerance and low-redundancy DNA storage through substantial computing power
+
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
+Contact: Ruibang Luo, Jingcheng Zhang  
+Email: {rbluo,zhangjc}@cs.hku.hk
 
 ## Introduction
 DNA has emerged as a compelling archival storage medium, offering unprecedented information density and millennia-scale durability. Despite its promise, DNA-based data storage faces critical challenges due to error-prone processes during DNA synthesis, storage, and sequencing. In this study, we introduce Gungnir, a codec system using the proof-of-work idea to address substitution, insertion, and deletion errors in a sequence. With a hash signature for each data fragment, Gungnir corrects the errors by testing the educated guesses until the hash signature is matched. For practicality, especially when sequenced with nanopore long-read, Gungnir also considers biochemical constraints including GC-content, homopolymers, and error-prone motifs during encoding. In silico benchmarking demonstrates its outperforming error resilience capacity against the state-of-art methods and achieving complete binary data recovery from a single sequence copy containing 20% erroneous bases. Gungnir requires neither keeping many redundant sequence copies to address storage degradation, nor high-coverage sequencing to address sequencing error, reducing the overall cost of using DNA for storage. 
