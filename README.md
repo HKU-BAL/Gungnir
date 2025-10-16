@@ -21,6 +21,7 @@ This repository provides a complete toolkit for running sample test, including e
   - [Add Noise](#2-add-noise)
   - [DNA Decoding](3-dna-decoding)
   - [Reconstruction](#4-reconstruction)
+  - [Expected Output](#5-expected-output)
 - [Customized Usage](#customized-usage)
 
 ## Files Tree Diagram
@@ -86,7 +87,7 @@ You can clone this repo as following:
 ```
 mkdir Gungnir_RootFolder
 cd Gungnir_RootFolder
-git clone git@github.com:HKU-BAL/Gungnir.git
+git clone https://github.com/HKU-BAL/Gungnir.git
 cd Gungnir/examples
 
 ```
@@ -117,6 +118,52 @@ Rebuild the original file from the decoded data.
 go run main.go -action Reconstruction -output "../Outcome"
 ```
 After this step, your original file will be recovered in *output* file inside the *Outcome* directory.
+
+
+
+### 5. Expected Output
+A quick run of the program produces the following terminal output for each step.
+
+Encodes: Encodes the source file into DNA strands.
+
+```
+Strand Num:  141
+```
+
+Add Noise: Simulates errors in the DNA strands. No terminal output is expected.
+
+Decode: Performs error correction and decodes the data.
+
+```
+Decoded finished, Hmax: 100000
+Total Sequences: 141  Failure Sequnces: 0
+First round Finished at Edit Distance upperbound:  3
+Second round begin!
+Total Sequences: 141  Failure Sequnces: 0
+0  sequences with no output! Hmax: 1000000
+0  no ouput,  0  fixed!
+Total Sequences: 141  Failure Sequnces: 0
+Second round Finished at Edit Distance upperbound:  3
+Total Sequences: 141  Failure Sequnces: 0  Mistaken Sequences: 0
+Data recovery:  1  Precision:  1  Recall:  1
+```
+
+Reconstruction: Rebuilds the original file from the decoded data. No terminal output is expected.
+
+Final Output Files:
+
+The `Outcome/` directory will contain the following files, where `output` is the final reconstructed file.
+
+```
+Outcome/
+├── Add_Error
+├── Decoded
+├── Origin
+├── output
+└── whetheroutput
+```
+
+To verify, the `output` file should be identical to the original input file.
 
 ## Customized Usage
 Adjust information density：
