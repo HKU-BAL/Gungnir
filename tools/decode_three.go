@@ -48,24 +48,24 @@ func (hypo *Hypothesis_Three) GC(params Params) int {
 }
 
 func (hypo *Hypothesis_Three) Depth(params Params) int {
-	return (hypo.Info >> params.Depthrightshift) & Uint8Mask
+	return (hypo.Info >> params.Depthrightshift) & Uint9Mask
 }
 
 func (hypo *Hypothesis_Three) Index(params Params) int {
-	return (hypo.Info >> params.Indexrightshift) & Uint8Mask
+	return (hypo.Info >> params.Indexrightshift) & Uint9Mask
 }
 
 func (hypo *Hypothesis_Three) GenStrandID(params Params) int {
-	return (hypo.Info >> params.Addressrightshift) & Uint16Mask
+	return (hypo.Info >> params.Addressrightshift) & Uint9Mask
 }
 
 func (hypo *Hypothesis_Three) BuildInfo(pattern, gc, depth, index, strandID int, params Params) int {
 	res := 0
 	res += (pattern & params.PatternMask)
 	res += (gc & Uint8Mask) << params.GCrightshift
-	res += (depth & Uint8Mask) << params.Depthrightshift
-	res += (index & Uint8Mask) << params.Indexrightshift
-	res += (strandID & Uint16Mask) << params.Addressrightshift
+	res += (depth & Uint9Mask) << params.Depthrightshift
+	res += (index & Uint9Mask) << params.Indexrightshift
+	res += (strandID & Uint9Mask) << params.Addressrightshift
 	return res
 }
 
@@ -103,7 +103,7 @@ func Genroothypo_Three(strandID int, params Params) Hypothesis_Three {
 	var hypo Hypothesis_Three
 	pattern := Runes2Pattern([]rune(InitPattern(params.PreviousNuc)), params)
 	hypo.Penalty_Info = 0
-	hypo.Info = hypo.BuildInfo(pattern, 0, 0, Uint8Mask, strandID, params)
+	hypo.Info = hypo.BuildInfo(pattern, 0, 0, Uint9Mask, strandID, params)
 	hypo.Bits = make([]int, params.Necessary_Decoding_Ints)
 	for i := 0; i < params.Necessary_Decoding_Ints; i++ {
 		hypo.Bits[i] = 0
@@ -298,8 +298,6 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 
 	potentialC := GenNextC_Three(gc, depth-gc, Pattern2runes(pattern, params), previous, strandID, depth, params)
 
-	// To be done: set temp_previous to 0 and update bits if depth of child = 7, 8, ...
-
 	// sub or ok ~ childX
 	for i := 0; i < 3; i++ {
 		if index == len(DataC)-1 {
@@ -309,14 +307,13 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 
 		x_depth := depth + 1
 		x_gc := gc
-		x_index := (index + 1) & Uint8Mask
+		x_index := (index + 1) & Uint9Mask
 
 		childX.Bits = make([]int, params.Necessary_Decoding_Ints)
 		for j := 0; j < params.Necessary_Decoding_Ints; j++ {
 			childX.Bits[j] = hypo.Bits[j]
 		}
 
-		// childX.UpdateBits(i, x_index)
 		ThisC := potentialC[i]
 
 		x_pattern := ((pattern << 2) + Nuc2Int(ThisC)) & params.PatternMask
@@ -346,9 +343,6 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 			if !valid {
 				continue
 			}
-			// if x_penalty == 0 && x_depth == 7 {
-			// 	fmt.Println(temp_bits)
-			// }
 			package_index := (x_depth / 7) - 1
 			for j := 0; j < 11; j++ {
 				childX.UpdateBits(temp_bits[j], package_index*11+j)
@@ -359,12 +353,17 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 			if !valid {
 				continue
 			}
-			temp_bits = temp_bits[:params.MaxBits%11]
+			remainingBits := params.MaxBits % 11
+			if remainingBits == 0 && params.Res3num > 0 {
+				remainingBits = 11
+			}
+			if len(temp_bits) > remainingBits {
+				temp_bits = temp_bits[:remainingBits]
+			}
 			package_index := x_depth / 7
 			for j := 0; j < len(temp_bits); j++ {
 				childX.UpdateBits(temp_bits[j], package_index*11+j)
 			}
-
 			x_temp_previous = 0
 		}
 
@@ -373,7 +372,6 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 		if x_penalty < EDmax+1 && childX.CheckHash(params) {
 			res = append(res, childX)
 		}
-
 	}
 
 	// del re-insert 3 possible characters
@@ -389,7 +387,6 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 			childD.Bits[j] = hypo.Bits[j]
 		}
 
-		// childD.UpdateBits(i, d_depth)
 		ThisC := potentialC[i]
 
 		d_pattern := ((pattern << 2) + Nuc2Int(ThisC)) & params.PatternMask
@@ -427,7 +424,13 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 			if !valid {
 				continue
 			}
-			temp_bits = temp_bits[:params.MaxBits%11]
+			remainingBits := params.MaxBits % 11
+			if remainingBits == 0 && params.Res3num > 0 {
+				remainingBits = 11
+			}
+			if len(temp_bits) > remainingBits {
+				temp_bits = temp_bits[:remainingBits]
+			}
 			package_index := d_depth / 7
 			for j := 0; j < len(temp_bits); j++ {
 				childD.UpdateBits(temp_bits[j], package_index*11+j)
@@ -459,15 +462,6 @@ func (hypo *Hypothesis_Three) Addchild(DataC []rune, EDmax int, params Params) [
 			res = append(res, childI)
 		}
 	}
-
-	// k := 98
-
-	// if hypo.Depth(params) == k && hypo.Penalty() == 0 && string(DataC) == "CACGATCCCGCTAGGGATTATCGCACTGTCGACCCTTAGCGTGGTAAGTTTGACTGTCACCTCCTAACGAAAGAAACGAAACGTGGTAGGTTCACTCATA" {
-	// 	fmt.Println(k, string(potentialC), hypo.TempPrevious())
-	// 	for i := 0; i < len(res); i++ {
-	// 		fmt.Println(res[i].GenStrandID(params), res[i].Depth(params), res[i].TempPrevious(), previous)
-	// 	}
-	// }
 
 	return res
 }
@@ -605,7 +599,6 @@ func Updateinfo_Three_Multithread(consensus []rune, Maxhypo int, threads_num int
 			for k := 0; k < uppbound; k++ {
 				count += sumlist[k]
 				if count > Maxhypo {
-					// count -= sumlist[k]
 					valid_index = k - 1
 					break
 				}
