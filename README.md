@@ -170,7 +170,7 @@ Adjust information density：
 ```
 go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -density 0.7
 ```
-Flexible sequence length (under development, only applicable for Gungnir and Gungnir-ONT now)：
+Flexible sequence length：
 ```
 go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outcome" -length 200
 ```
@@ -194,8 +194,8 @@ go run main.go -action Encode -input "../files/Summer Flowers" -output "../Outco
 go run main.go -action Decode -output "../Outcome" -option Gungnir-Trit -density 1.11
 ```
 >[!Note]
->Gungnir and Gungnir-ONT support density range: [0.5, 0.6, 0.7, 0.8, 0.9]  
->Gungnir-Trit supports density range: [0.87, 0.99, 1.11, 1.23, 1.35, 1.45]
+>Gungnir and Gungnir-ONT support density range: [0.5-0.9]  
+>Gungnir-Trit supports density range: [0.5-1.5]
 
 Limiting Output Sequences:
 ```
