@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Gungnir_logo.png" alt="Gungnir" width = "150"/>
+</p>
+
 # Gungnir
 Gungnir codec enabling high error-tolerance and low-redundancy DNA storage through substantial computing power
 
