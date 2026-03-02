@@ -314,6 +314,8 @@ func DecodeWithEDmax(filepath string, threads_num1, threads_num2 int, params Par
 		}
 
 		if fail < old_fail {
+			// For Gungnir-ONT
+			// if float64(fail)/float64(existseq) < 0.3 {
 			if float64(fail)/float64(totalseq) < 0.5 {
 				old_fail = fail
 				fmt.Println("Second round begin!")
@@ -321,6 +323,7 @@ func DecodeWithEDmax(filepath string, threads_num1, threads_num2 int, params Par
 				fmt.Println("Second round Finished at Edit Distance upperbound: ", EDmax)
 			}
 
+			// if float64(fail)/float64(existseq) < 0.1 && fail < old_fail {
 			if float64(fail)/float64(totalseq) < 0.2 && fail < old_fail {
 				old_fail = fail
 				fmt.Println("Third round begin!")
@@ -328,6 +331,7 @@ func DecodeWithEDmax(filepath string, threads_num1, threads_num2 int, params Par
 				fmt.Println("Third round Finished at Edit Distance upperbound: ", EDmax)
 			}
 
+			// if float64(fail)/float64(existseq) < 0.05 && fail < old_fail {
 			if float64(fail)/float64(totalseq) < 0.1 && fail < old_fail {
 				old_fail = fail
 				fmt.Println("Forth round begin!")
